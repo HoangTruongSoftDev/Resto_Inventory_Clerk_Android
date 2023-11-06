@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StaffActivity">
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inventory Management For Staff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/tvLabelItemId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item ID"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        />
+
+    <EditText
+        android:id="@+id/edItemId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelItemId"
+        app:layout_constraintLeft_toRightOf="@id/tvLabelItemId"
+        android:layout_marginLeft="30dp"
+        />
+
+    <TextView
+        android:id="@+id/tvLabelItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Name"
+        app:layout_constraintStart_toStartOf="@id/tvLabelItemId"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelItemId"
+        android:layout_marginTop= "35dp"
+        />
+
+    <EditText
+        android:id="@+id/edItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelItemName"
+        app:layout_constraintStart_toStartOf="@id/edItemId"
+        />
+
+    <TextView
+        android:id="@+id/tvLabelQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity"
+        app:layout_constraintStart_toStartOf="@id/tvLabelItemName"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelItemName"
+        android:layout_marginTop="30dp"
+        />
+
+    <EditText
+        android:id="@+id/edQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelQuantity"
+        app:layout_constraintStart_toStartOf="@id/edItemName"
+        />
+
+    <TextView
+        android:id="@+id/tvLabelUnitPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unit Price"
+        app:layout_constraintStart_toStartOf="@id/tvLabelQuantity"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelQuantity"
+        android:layout_marginTop="30dp"
+        />
+
+    <EditText
+        android:id="@+id/edUnitPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelUnitPrice"
+        app:layout_constraintStart_toStartOf="@id/edQuantity"
+        />
+
+    <TextView
+        android:id="@+id/tvLabelUnitOfMeasure"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="Unit Of Measure"
+        app:layout_constraintStart_toStartOf="@id/tvLabelUnitPrice"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelUnitPrice"
+        android:layout_marginTop="30dp"
+        />
+
+    <EditText
+        android:id="@+id/edUnitOfMeasure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelUnitOfMeasure"
+        app:layout_constraintStart_toStartOf="@id/edUnitPrice"
+        />
+
+    <TextView
+        android:id="@+id/tvTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Price"
+        app:layout_constraintStart_toStartOf="@id/tvLabelUnitOfMeasure"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelUnitOfMeasure"
+        android:layout_marginTop="30dp"
+        />
+
+    <EditText
+        android:id="@+id/edTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvTotalPrice"
+        app:layout_constraintStart_toStartOf="@id/edUnitOfMeasure"
+        />
+    <TextView
+        android:id="@+id/tvQuantityConsumed"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:text="Quantity Consumed"
+        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalPrice"
+        android:layout_marginTop="30dp"
+        />
+
+    <EditText
+        android:id="@+id/edQuantityConsumed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvQuantityConsumed"
+        app:layout_constraintStart_toStartOf="@id/edTotalPrice"
+        />
+    <Button
+        android:id="@+id/btnConsume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consume"
+        app:layout_constraintLeft_toRightOf="@id/edQuantityConsumed"
+        app:layout_constraintBaseline_toBaselineOf="@id/edQuantityConsumed"
+        android:textAllCaps="false"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvLabelMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Item ID"
+        app:layout_constraintLeft_toLeftOf="@id/edSearch"
+        app:layout_constraintRight_toRightOf="@id/edSearch"
+        app:layout_constraintTop_toBottomOf="@id/tvQuantityConsumed"
+        android:layout_marginTop="30dp"
+        />
+    <TextView
+        android:id="@+id/tvLabelSearchBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search By"
+        app:layout_constraintStart_toStartOf="@id/tvQuantityConsumed"
+        app:layout_constraintTop_toBottomOf="@id/tvQuantityConsumed"
+        android:layout_marginTop="30dp"
+
+
+        />
+
+    <Spinner
+        android:id="@+id/spinnerListSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/tvLabelSearchBy"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelSearchBy"
+        android:layout_marginTop="10dp"
+        />
+    <EditText
+        android:id="@+id/edSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/spinnerListSearch"
+        app:layout_constraintLeft_toRightOf="@id/spinnerListSearch"
+        />
+    <ImageButton
+        android:id="@+id/imageButtonSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/magnifyingglass"
+        app:layout_constraintLeft_toRightOf="@id/edSearch"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelMessage"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        />
+
+
+    <Button
+        android:id="@+id/btnListAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List All"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edSearch"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="50dp"
+        />
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        app:layout_constraintBaseline_toBaselineOf="@id/btnListAll"
+        app:layout_constraintLeft_toRightOf="@id/btnListAll"
+        android:layout_marginLeft="20dp"
+        />
+
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Out"
+        app:layout_constraintBaseline_toBaselineOf="@id/btnListAll"
+        app:layout_constraintLeft_toRightOf="@id/btnClear"
+        android:layout_marginLeft="20dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

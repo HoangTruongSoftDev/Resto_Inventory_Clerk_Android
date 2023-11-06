@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.resto_inventory_clerk_android"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.resto_inventory_clerk_android"
