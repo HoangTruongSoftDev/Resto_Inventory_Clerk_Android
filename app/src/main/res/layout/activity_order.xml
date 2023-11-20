@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderActivity">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place Order"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        />
+
+    <TextView
+        android:id="@+id/tvItemId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Id"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Name"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/tvItemId"
+        app:layout_constraintTop_toBottomOf="@id/tvItemId"/>
+
+    <TextView
+        android:id="@+id/tvQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity"
+
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/tvItemId"
+        app:layout_constraintTop_toBottomOf="@id/tvItemName"/>
+
+    <TextView
+        android:id="@+id/tvPricePer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/tvItemId"
+        app:layout_constraintTop_toBottomOf="@id/tvQuantity"/>
+
+    <TextView
+        android:id="@+id/tvUofMeasure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unit Of Measure"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/tvItemId"
+        app:layout_constraintTop_toBottomOf="@id/tvPricePer"/>
+
+    <TextView
+        android:id="@+id/tvTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Price"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/tvItemId"
+        app:layout_constraintTop_toBottomOf="@id/tvUofMeasure"/>
+
+    <EditText
+        android:id="@+id/edItemId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="20dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvItemId"
+
+        />
+
+    <EditText
+        android:id="@+id/edItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintStart_toStartOf="@id/edItemId"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvItemName"/>
+
+    <EditText
+        android:id="@+id/edQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintStart_toStartOf="@id/edItemId"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvQuantity"/>
+
+    <EditText
+        android:id="@+id/edPricePer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintStart_toStartOf="@id/edItemId"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvPricePer"/>
+    <EditText
+        android:id="@+id/edUofMeasure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintStart_toStartOf="@id/edItemId"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvUofMeasure"/>
+
+
+    <TextView
+        android:id="@+id/tvTotalPriceAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/edItemId"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvTotalPrice"/>
+
+    <TextView
+        android:id="@+id/tvPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payment"
+        android:textSize="20dp"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTotalPrice"
+        />
+
+    <TextView
+        android:id="@+id/tvCardNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Card Number"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
+        app:layout_constraintTop_toBottomOf="@id/tvPay"
+        />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name on Card"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
+        app:layout_constraintTop_toBottomOf="@id/tvCardNumber" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expiration date"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
+        app:layout_constraintTop_toBottomOf="@id/textView11"/>
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CSV"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
+        app:layout_constraintTop_toBottomOf="@id/textView12" />
+
+    <EditText
+        android:id="@+id/editTextText7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@id/tvCardNumber"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="20dp"
+        />
+
+    <EditText
+        android:id="@+id/editTextText8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@id/textView11"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="20dp" />
+
+    <EditText
+        android:id="@+id/editTextText9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@id/textView12"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="20dp"/>
+
+    <EditText
+        android:id="@+id/editTextText10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintBaseline_toBaselineOf="@id/textView13"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="20dp" />
+
+    <Button
+        android:id="@+id/btnPlaceOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place Order"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

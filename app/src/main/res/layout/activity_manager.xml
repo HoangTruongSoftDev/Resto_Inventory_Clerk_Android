@@ -140,6 +140,16 @@
         app:layout_constraintBaseline_toBaselineOf="@id/tvTotalPrice"
         app:layout_constraintStart_toStartOf="@id/edUnitOfMeasure"
         />
+    <Button
+        android:id="@+id/btnPlaceOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Place Order"
+        app:layout_constraintBaseline_toBaselineOf="@id/edTotalPrice"
+        app:layout_constraintLeft_toRightOf="@id/edTotalPrice"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textAllCaps="false"
+        />
     <TextView
         android:id="@+id/tvQuantityConsumed"
         android:layout_width="70dp"

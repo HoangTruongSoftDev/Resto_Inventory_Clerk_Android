@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "534718701244",
+    "firebase_url": "https://restoinventoryclerkdb-default-rtdb.firebaseio.com",
+    "project_id": "restoinventoryclerkdb",
+    "storage_bucket": "restoinventoryclerkdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:534718701244:android:7f626a9eac113146647ab9",
+        "android_client_info": {
+          "package_name": "com.example.resto_inventory_clerk_android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXJWzB3y-nzLVkowFPU0BRRSxp6f62Iyk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
