@@ -1,6 +1,8 @@
 package model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private int userId;
     private String password;
     private String position;
@@ -54,6 +56,6 @@ public class User {
 
     @Override
     public String toString() {
-        return String.valueOf(userId);
+        return String.valueOf(userId) + " === " + password + " === " + position;
     }
 }

@@ -1,10 +1,18 @@
 package com.example.resto_inventory_clerk_android;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,18 +24,35 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AdminActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+import model.Employee;
+import model.User;
+import service.Service;
+import service.Validator;
+
+public class AdminActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener, DialogInterface.OnClickListener {
 
 
-    EditText edEmployeeId, edFirstName, edLastName, edEmail, edPassword, edSearch;
-    RadioGroup rgPosition, rgPositionSearch;
-    RadioButton rbManager, rbStaff, rbManagerSearch, rbStaffSearch;
-    ImageButton imageButtonShowPassword, imageButtonSearch;
-    Spinner spinnerListSearch;
-    Button btnSave, btnClear, btnUpdate, btnDelete, btnListAll, btnLogOut;
+    EditText edEmployeeId, edFirstName, edLastName, edEmail, edPassword;
+    RadioGroup rgPosition;
+    RadioButton rbManager, rbStaff;
+    ImageButton imageButtonShowPassword;
+    Button btnSave, btnClear, btnDelete, btnReturn;
 
-    TextView tvLabelMessage;
-
+    Employee receivedEmployee = null;
+    User receivedUser = null;
+    DatabaseReference firebaseDatabase;
+    ArrayList<Employee> listOfEmployees;
+    AlertDialog.Builder alertDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,92 +61,229 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initialize() {
+
         edEmployeeId = findViewById(R.id.edEmployeeId);
         edFirstName = findViewById(R.id.edFirstName);
         edLastName = findViewById(R.id.edLastName);
         edEmail = findViewById(R.id.edEmail);
         edPassword = findViewById(R.id.edPassword);
-        edSearch = findViewById(R.id.edSearch);
+
         rgPosition = findViewById(R.id.rgPosition);
         rbManager = findViewById(R.id.rbManager);
         rbStaff = findViewById(R.id.rbStaff);
         imageButtonShowPassword = findViewById(R.id.imageButtonShowPassword);
-        imageButtonSearch = findViewById(R.id.imageButtonSearch);
-        spinnerListSearch = findViewById(R.id.spinnerListSearch);
         btnSave = findViewById(R.id.btnSave);
         btnClear = findViewById(R.id.btnClear);
-        btnUpdate = findViewById(R.id.btnUpdate);
         btnDelete = findViewById(R.id.btnDelete);
-        btnListAll = findViewById(R.id.btnListAll);
-        btnLogOut = findViewById(R.id.btnLogOut);
-        tvLabelMessage = findViewById(R.id.tvLabelMessage);
-        rbManagerSearch = findViewById(R.id.rbManagerSearch);
-        rbStaffSearch = findViewById(R.id.rbStaffSearch);
-        rgPositionSearch = findViewById(R.id.rgPositionSearch);
+        btnReturn = findViewById(R.id.btnReturn);
+
+        listOfEmployees = new ArrayList<>();
 
         btnSave.setOnClickListener(this);
         btnClear.setOnClickListener(this);
-        btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
-        btnListAll.setOnClickListener(this);
-        btnLogOut.setOnClickListener(this);
+        btnReturn.setOnClickListener(this);
+        imageButtonShowPassword.setOnClickListener(this);
 
-        // 1. Define an array of search options
-        String[] searchOptions = {"User ID", "First Name", "Last Name", "Email", "Position"};
-        // 2. Create an ArrayAdapter and initialize it with the array of search options
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, searchOptions);
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference();
+        firebaseDatabase.addChildEventListener(this);
 
-        // 3. Set the layout resource for the drop-down view
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        if (getIntent().getSerializableExtra("receivedUser") != null && getIntent().getSerializableExtra("receivedEmployee") != null) {
+            edEmployeeId.setEnabled(false);
+            receivedUser = (User) getIntent().getSerializableExtra("receivedUser");
+            receivedEmployee = (Employee) getIntent().getSerializableExtra("receivedEmployee");
+            edEmployeeId.setText(String.valueOf(receivedEmployee.getEmployeeId()));
+            edFirstName.setText(receivedEmployee.getFirstName());
 
-        // 4. Set the adapter for the Spinner widget to display the search options
-        spinnerListSearch.setAdapter(adapter);
+            edLastName.setText(receivedEmployee.getLastName());
+            edEmail.setText(receivedEmployee.getEmail());
+            switch (receivedUser.getPosition()) {
+                case "Manager":
+                    rbManager.setChecked(true);
+                    break;
+                case "Staff":
+                    rbStaff.setChecked(true);
+                    break;
+            }
+        }
+        else {
+            btnDelete.setVisibility(View.INVISIBLE);
+        }
+        alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("COnfirmation");
+        alertDialog.setMessage("Do you want to delete this user?");
+        alertDialog.setPositiveButton("Yes", this);
+        alertDialog.setNegativeButton("No", this);
 
-        // 5. Set an OnItemSelectedListener to handle item selection events, this will trigger function onItemSelected() when the item clicked or function onNothingSelected
-        spinnerListSearch.setOnItemSelectedListener(this);
     }
 
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.btnSave) {
+            saveUser();
+        }
+        else if (v.getId() == R.id.btnClear) {
+            Service.clearAllWidgets((ViewGroup) findViewById(R.id.layoutAdminActivity));
+        }
+        else if (v.getId() == R.id.btnDelete) {
+            deleteUser();
+        }
+        else if (v.getId() == R.id.btnReturn) {
+            finish();
+        }
+        else if (v.getId() == R.id.imageButtonShowPassword) {
+            if (edPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
+                // If it's a password field, change it to plain text
+                edPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+                imageButtonShowPassword.setImageResource(R.drawable.hidethepassword);
 
+            } else if (edPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL)) {
+                // If it's not a password field, change it to a password field
+                edPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                imageButtonShowPassword.setImageResource(R.drawable.showthepassword);
+            }
+        }
     }
 
+    private void deleteUser() {
+        alertDialog.create().show();
+    }
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (String.valueOf(parent.getItemAtPosition(position))) {
-            case "User ID":
-                tvLabelMessage.setText("Enter Employee ID");
-                rgPositionSearch.setVisibility(View.INVISIBLE);
-                edSearch.setVisibility(View.VISIBLE);
-                break;
-            case "First Name":
-                tvLabelMessage.setText("Enter Employee First Name");
-                rgPositionSearch.setVisibility(View.INVISIBLE);
-                edSearch.setVisibility(View.VISIBLE);
-                break;
-            case "Last Name":
-                tvLabelMessage.setText("Enter Employee Last Name");
-                rgPositionSearch.setVisibility(View.INVISIBLE);
-                edSearch.setVisibility(View.VISIBLE);
-                break;
-            case "Email":
-                tvLabelMessage.setText("Enter Employee Email");
-                rgPositionSearch.setVisibility(View.INVISIBLE);
-                edSearch.setVisibility(View.VISIBLE);
-                break;
-            case "Position":
-                tvLabelMessage.setText("Enter Employee Position");
-                rgPositionSearch.setVisibility(View.VISIBLE);
-                edSearch.setVisibility(View.INVISIBLE);
-                break;
-            default:
-                break;
+    public void onClick(DialogInterface dialog, int which) {
+        if (which == Dialog.BUTTON_POSITIVE) {
+            firebaseDatabase.child("Employee").child(edEmployeeId.getText().toString()).removeValue();
+            firebaseDatabase.child("User").child(edEmployeeId.getText().toString()).removeValue();
+            Toast.makeText(this, "Delete User Successfully", Toast.LENGTH_LONG);
+            finish();
+        }
+        else if (which == Dialog.BUTTON_NEGATIVE) {
+            Toast.makeText(this, "Cancel User Deletion", Toast.LENGTH_LONG);
+        }
+    }
+    private void saveUser() {
+        Employee newEmployee;
+        User newUser;
+        if (edEmployeeId.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Missing Employee ID", Toast.LENGTH_SHORT).show();
+            edEmployeeId.requestFocus();
+            return;
+        }
 
+        String position = rgPosition.getCheckedRadioButtonId() == R.id.rbManager ? "Manager" :
+                        rgPosition.getCheckedRadioButtonId() == R.id.rbStaff ? "Staff" : null;
+        if (position == null) {
+            Toast.makeText(this, "Please select employee position", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!Validator.isValidUserId(edEmployeeId.getText().toString(), position)) {
+            Toast.makeText(this, "The ID must be 6-digit number", Toast.LENGTH_SHORT).show();
+            edEmployeeId.setText(null);
+            return;
+        }
+
+        int id = Integer.valueOf(edEmployeeId.getText().toString());
+        if (receivedEmployee == null && receivedUser == null) {
+            newEmployee = new Employee();
+            newUser = new User();
+            if (listOfEmployees.stream().filter(e -> e.getEmployeeId() == Integer.valueOf(edEmployeeId.getText().toString())).findFirst().orElse(null) != null) {
+                Toast.makeText(this, "This Employee Existing already exists", Toast.LENGTH_SHORT).show();
+                edEmployeeId.setText(null);
+                return;
+            }
+        }
+        else {
+            newUser = receivedUser;
+            newEmployee = receivedEmployee;
+        }
+        newUser.setUserId(id);
+        newEmployee.setEmployeeId(id);
+        newUser.setPosition(position);
+        if (edFirstName.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Missing Employee First Name", Toast.LENGTH_SHORT).show();
+            edFirstName.requestFocus();
+            return;
+        }
+        newEmployee.setFirstName(edFirstName.getText().toString());
+        if (edLastName.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Missing Employee Last Name", Toast.LENGTH_SHORT).show();
+            edLastName.requestFocus();
+            return;
+        }
+        newEmployee.setLastName(edLastName.getText().toString());
+        if (edEmail.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Missing Employee Email", Toast.LENGTH_SHORT).show();
+            edEmail.requestFocus();
+            return;
+        }
+        if (receivedEmployee == null && receivedUser == null) {
+            if (listOfEmployees.stream().filter(e -> e.getEmail().equals(edEmail.getText().toString())).findFirst().orElse(null) != null) {
+                Toast.makeText(this, "This Employee Email already exists", Toast.LENGTH_SHORT).show();
+                edEmail.setText(null);
+                return;
+            }
+        }
+        newEmployee.setEmail(edEmail.getText().toString());
+        if (receivedUser == null) {
+            if (edPassword.getText().toString().isEmpty()) {
+                Toast.makeText(this, "Missing Employee Password", Toast.LENGTH_SHORT).show();
+                edPassword.requestFocus();
+                return;
+            }
+            newUser.setPassword(edPassword.getText().toString());
+        }
+        else {
+            if (!edPassword.getText().toString().isEmpty()) {
+                newUser.setPassword(edPassword.getText().toString());
+            }
+        }
+        Toast.makeText(this, "Saving Account Successfully", Toast.LENGTH_SHORT).show();
+        firebaseDatabase.child("Employee").child(String.valueOf(newEmployee.getEmployeeId())).setValue(newEmployee);
+        firebaseDatabase.child("User").child(String.valueOf(newUser.getUserId())).setValue(newUser);
+        if (receivedUser == null && receivedEmployee == null) {
+            Intent intent = new Intent();
+            intent.putExtra("new_user", newUser);
+            intent.putExtra("new_employee", newEmployee);
+            intent.putExtra("action", "create");
+            setResult(RESULT_OK, intent);
+        }
+        else {
+            Intent intent = new Intent();
+            intent.putExtra("new_user", newUser);
+            intent.putExtra("new_employee", newEmployee);
+            intent.putExtra("action", "update");
+            setResult(RESULT_OK, intent);
         }
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        if (snapshot.getKey().equals("Employee")) {
+            for (DataSnapshot currentSnapshot : snapshot.getChildren()) {
+                Employee employee = currentSnapshot.getValue(Employee.class);
+                listOfEmployees.add(employee);
+            }
+        }
+    }
+
+    @Override
+    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
     }
+
+    @Override
+    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+    }
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError error) {
+
+    }
+
+
 }

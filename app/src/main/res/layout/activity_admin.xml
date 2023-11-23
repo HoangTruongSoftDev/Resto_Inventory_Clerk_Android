@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminActivity">
+    tools:context=".AdminActivity"
+    android:id="@+id/layoutAdminActivity"
+    >
 
     <TextView
         android:id="@+id/tvTitle"
@@ -166,79 +168,10 @@
         android:background="@android:color/transparent"
         android:layout_marginTop="25dp"
         />
-    <TextView
-        android:id="@+id/tvLabelMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter Employee ID"
-        app:layout_constraintLeft_toLeftOf="@id/edSearch"
-        app:layout_constraintRight_toRightOf="@id/edSearch"
-        app:layout_constraintTop_toBottomOf="@id/tvPassword"
-        android:layout_marginTop="30dp"
-        />
-    <TextView
-        android:id="@+id/tvLabelSearchBy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search By"
-        app:layout_constraintStart_toStartOf="@id/tvPassword"
-        app:layout_constraintTop_toBottomOf="@id/tvPassword"
-        android:layout_marginTop="30dp"
 
 
-        />
 
-    <Spinner
-        android:id="@+id/spinnerListSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/tvLabelSearchBy"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelSearchBy"
-        android:layout_marginTop="30dp"
-        />
-    <EditText
-        android:id="@+id/edSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        app:layout_constraintBaseline_toBaselineOf="@id/spinnerListSearch"
-        app:layout_constraintLeft_toRightOf="@id/spinnerListSearch"
-        />
-    <RadioGroup
-        android:id="@+id/rgPositionSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
 
-        app:layout_constraintLeft_toRightOf="@id/spinnerListSearch"
-        android:layout_marginLeft="10dp"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelMessage"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        >
-        <RadioButton
-            android:id="@+id/rbManagerSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Manager" />
-
-        <RadioButton
-            android:id="@+id/rbStaffSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Staff" />
-    </RadioGroup>
-    <ImageButton
-        android:id="@+id/imageButtonSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/magnifyingglass"
-        app:layout_constraintLeft_toRightOf="@id/edSearch"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelMessage"
-        android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
-        />
 
     <Button
         android:id="@+id/btnSave"
@@ -246,9 +179,19 @@
         android:layout_height="wrap_content"
         android:text="Save"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinnerListSearch"
-        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toBottomOf="@id/tvPassword"
+        android:layout_marginTop="60dp"
         android:layout_marginLeft="50dp"
+        />
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+
+        app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
+        app:layout_constraintLeft_toRightOf="@id/btnSave"
+        android:layout_marginLeft="20dp"
         />
 
     <Button
@@ -257,45 +200,22 @@
         android:layout_height="wrap_content"
         android:text="Clear"
         app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
-        app:layout_constraintLeft_toRightOf="@id/btnSave"
+        app:layout_constraintLeft_toRightOf="@id/btnDelete"
         android:layout_marginLeft="20dp"
         />
 
-    <Button
-        android:id="@+id/btnUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Update"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
-        app:layout_constraintLeft_toRightOf="@id/btnClear"
-        android:layout_marginLeft="20dp"/>
+
+
 
     <Button
-        android:id="@+id/btnDelete"
+        android:id="@+id/btnReturn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
-        app:layout_constraintStart_toStartOf="@id/btnSave"
-        app:layout_constraintTop_toBottomOf="@id/btnSave"
-        android:layout_marginTop="20dp"
-        />
-
-    <Button
-        android:id="@+id/btnListAll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="List All"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnDelete"
-        app:layout_constraintStart_toStartOf="@id/btnClear"
-        />
-
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log Out"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnListAll"
-       app:layout_constraintStart_toStartOf="@id/btnUpdate"
+        android:text="Return"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
