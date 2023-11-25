@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Resto_Inventory_Clerk_Android"
         tools:targetApi="31">
         <activity
+            android:name=".StaffItemListActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminListActivity"
             android:exported="false" />
         <activity

@@ -138,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, ManagerActivity.class);
                 break;
             case "Staff":
-                intent = new Intent(this, StaffActivity.class);
+                intent = new Intent(this, StaffItemListActivity.class);
                 break;
         }
         startActivity(intent);
