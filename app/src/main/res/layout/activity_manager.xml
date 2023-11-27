@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ManagerActivity">
+
+    <Button
+        android:id="@+id/btnConsume2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Consume"
+        android:textAllCaps="false"
+        app:layout_constraintBaseline_toBaselineOf="@id/edQuantityConsumed"
+        app:layout_constraintLeft_toRightOf="@id/edQuantityConsumed"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -140,16 +151,7 @@
         app:layout_constraintBaseline_toBaselineOf="@id/tvTotalPrice"
         app:layout_constraintStart_toStartOf="@id/edUnitOfMeasure"
         />
-    <Button
-        android:id="@+id/btnPlaceOrder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Place Order"
-        app:layout_constraintBaseline_toBaselineOf="@id/edTotalPrice"
-        app:layout_constraintLeft_toRightOf="@id/edTotalPrice"
-        app:layout_constraintRight_toRightOf="parent"
-        android:textAllCaps="false"
-        />
+
     <TextView
         android:id="@+id/tvQuantityConsumed"
         android:layout_width="70dp"
@@ -169,16 +171,17 @@
         app:layout_constraintBaseline_toBaselineOf="@id/tvQuantityConsumed"
         app:layout_constraintStart_toStartOf="@id/edTotalPrice"
         />
+
     <Button
         android:id="@+id/btnConsume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Consume"
-        app:layout_constraintLeft_toRightOf="@id/edQuantityConsumed"
         app:layout_constraintBaseline_toBaselineOf="@id/edQuantityConsumed"
-        android:textAllCaps="false"
-        app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintLeft_toRightOf="@id/edQuantityConsumed"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <TextView
         android:id="@+id/tvQuantityImport"
         android:layout_width="70dp"
@@ -204,74 +207,19 @@
         android:id="@+id/btnImport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Import"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvQuantityImport"
         app:layout_constraintLeft_toRightOf="@id/edQuantityImport"
-        app:layout_constraintBaseline_toBaselineOf="@id/edQuantityImport"
-        android:textAllCaps="false"
-        app:layout_constraintRight_toRightOf="parent"
-        />
-
-    <TextView
-        android:id="@+id/tvLabelMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter Item ID"
-        app:layout_constraintLeft_toLeftOf="@id/edSearch"
-        app:layout_constraintRight_toRightOf="@id/edSearch"
-        app:layout_constraintTop_toBottomOf="@id/tvQuantityImport"
-        android:layout_marginTop="30dp"
-        />
-    <TextView
-        android:id="@+id/tvLabelSearchBy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search By"
-        app:layout_constraintStart_toStartOf="@id/tvQuantityImport"
-        app:layout_constraintTop_toBottomOf="@id/tvQuantityImport"
-        android:layout_marginTop="30dp"
-
-
-        />
-
-    <Spinner
-        android:id="@+id/spinnerListSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/tvLabelSearchBy"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelSearchBy"
-        android:layout_marginTop="10dp"
-        />
-    <EditText
-        android:id="@+id/edSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        app:layout_constraintBaseline_toBaselineOf="@id/spinnerListSearch"
-        app:layout_constraintLeft_toRightOf="@id/spinnerListSearch"
-        />
-    <ImageButton
-        android:id="@+id/imageButtonSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/magnifyingglass"
-        app:layout_constraintLeft_toRightOf="@id/edSearch"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelMessage"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/transparent"
-        />
-
+        android:text="Import" />
 
     <Button
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edSearch"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="50dp"
-        />
+        android:text="Save"
+        app:layout_constraintTop_toBottomOf="@id/tvQuantityImport"
+        android:layout_marginTop="50dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/btnClear"
@@ -303,20 +251,12 @@
         />
 
     <Button
-        android:id="@+id/btnListAll"
+        android:id="@+id/btnReturn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="List All"
+        android:text="Return"
         app:layout_constraintBaseline_toBaselineOf="@id/btnDelete"
-        app:layout_constraintStart_toStartOf="@id/btnClear"
-        />
-
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log Out"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnListAll"
-        app:layout_constraintStart_toStartOf="@id/btnUpdate"
+        app:layout_constraintLeft_toRightOf="@id/btnDelete"
+        app:layout_constraintRight_toRightOf="parent"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
