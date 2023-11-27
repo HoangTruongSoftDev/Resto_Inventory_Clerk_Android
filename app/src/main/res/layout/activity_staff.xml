@@ -186,6 +186,10 @@
         android:id="@+id/btnReturn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="40dp"
         android:text="Return"
         tools:layout_editor_absoluteX="169dp"
         tools:layout_editor_absoluteY="545dp" />

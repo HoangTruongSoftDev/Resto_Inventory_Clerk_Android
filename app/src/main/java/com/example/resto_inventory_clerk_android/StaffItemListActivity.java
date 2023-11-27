@@ -11,7 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,6 +24,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -71,16 +75,44 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
 
         listOfItems = new ArrayList<>();
         listOfSearchItems = new ArrayList<>();
-        firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("Item");
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference("Item");
         firebaseDatabase.addChildEventListener(this);
-
         lvItems = findViewById(R.id.lvItems);
         lvItems.setOnItemClickListener(this);
 
-        itemArrayAdapter = new ArrayAdapter<Item>(this, R.layout.single_item_layout,listOfSearchItems);
+        itemArrayAdapter = new ArrayAdapter<Item>(this, R.layout.single_item_layout, listOfSearchItems) {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                // Use convertView to recycle views for better performance
+                View view = convertView;
+
+                if (view == null) {
+                    // If convertView is null, inflate the layout
+                    LayoutInflater inflater = LayoutInflater.from(getContext());
+                    view = inflater.inflate(R.layout.single_item_layout, parent, false);
+                }
+
+                // Get the item for this position
+                Item item = getItem(position);
+
+                // Find the TextViews in the layout
+                TextView tvItemId = view.findViewById(R.id.tvItemId);
+                TextView tvItemName = view.findViewById(R.id.tvItemName);
+                TextView tvQuantity = view.findViewById(R.id.tvQuantity);
+
+                // Set the data to the TextViews
+                if (item != null) {
+                    tvItemId.setText(String.valueOf(item.getItemId()));
+                    tvItemName.setText(item.getName());
+                    tvQuantity.setText(String.valueOf(item.getQuantity()));
+                }
+                return view;
+            }
+        };
         lvItems.setAdapter(itemArrayAdapter);
 
-        String[] searchOptions = {"Item ID", "Itme Name"};
+        String[] searchOptions = {"Item ID", "Item Name","All"};
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, searchOptions);
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerListSearch.setAdapter(adapterSpinner);
@@ -98,13 +130,23 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult o) {
-                        Item receivedItem = (Item) o.getData().getSerializableExtra("new_item");
-                        for (int i = 0; i < listOfItems.size(); i++) {
-                            Item currentItem = listOfItems.get(i);
-                            if (currentItem.getItemId() == receivedItem.getItemId()) {
-                                listOfItems.set(i, receivedItem);
-                                break;
+                        if (o.getResultCode() == RESULT_OK) {
+                            Item receivedItem = (Item) o.getData().getSerializableExtra("new_item");
+                            for (int i = 0; i < listOfItems.size(); i++) {
+                                Item currentItem = listOfItems.get(i);
+                                if (currentItem.getItemId() == receivedItem.getItemId()) {
+                                    listOfItems.set(i, receivedItem);
+                                    break;
+                                }
                             }
+                            for (int i = 0; i < listOfSearchItems.size(); i++) {
+                                Item currentItem = listOfSearchItems.get(i);
+                                if (currentItem.getItemId() == receivedItem.getItemId()) {
+                                    listOfSearchItems.set(i, receivedItem);
+                                    break;
+                                }
+                            }
+                            itemArrayAdapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -115,43 +157,55 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         if (v.getId() == R.id.btnLogOut) {
             finish();
-        }
-        else if (v.getId() == R.id.imageButtonSearch) {
+        } else if (v.getId() == R.id.imageButtonSearch) {
             searchItem(String.valueOf(spinnerListSearch.getSelectedItem()));
         }
     }
+
 
     private void searchItem(String searchOption) {
         listOfSearchItems.clear();
         switch (searchOption) {
             case "Item ID":
-                for (Item currentItem : listOfItems) {
-                    if (currentItem.getItemId() == Integer.valueOf(edSearch.getText().toString())) {
-                        listOfSearchItems.add(currentItem);
-
-                        Item item = (Item) listOfItems.stream().filter(i -> i.getItemId() == currentItem.getItemId()).findFirst().orElse(null);
-                        listOfSearchItems.add(item);
+                String searchItemIdStr = edSearch.getText().toString().trim();
+                if (!searchItemIdStr.isEmpty()) {
+                    try {
+                        int searchItemId = Integer.parseInt(searchItemIdStr);
+                        for (Item currentItem : listOfItems) {
+                            if (currentItem.getItemId() == searchItemId) {
+                                listOfSearchItems.add(currentItem);
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
                     }
                 }
                 break;
             case "Item Name":
+                String searchItemName = edSearch.getText().toString().trim();
                 for (Item currentItem : listOfItems) {
-                    if (currentItem.getName().equals(edSearch.getText().toString())) {
+                    if (currentItem.getName().equalsIgnoreCase(searchItemName)) {
                         listOfSearchItems.add(currentItem);
-                        listOfSearchItems.add((Item) listOfItems.stream().filter(i -> i.getItemId() == currentItem.getItemId()).findFirst().orElse(null));
                     }
                 }
                 break;
+
         }
         itemArrayAdapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
         Item item = snapshot.getValue(Item.class);
-        listOfItems.add(item);
-        itemArrayAdapter.notifyDataSetChanged();
-
+        if (item != null) {
+            listOfItems.add(item);
+            listOfSearchItems.add(item);
+            Log.d("Firebase", "Item added: " + item.toString());
+            itemArrayAdapter.notifyDataSetChanged();
+        } else {
+            Log.e("Firebase", "Received null item from database");
+        }
     }
 
     @Override
@@ -177,12 +231,12 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, StaffActivity.class);
-        Item item = listOfItems.stream().filter(i -> i.getItemId() == listOfSearchItems.get(position).getItemId()).findFirst().orElse(null);
+        Item item = listOfSearchItems.get(position);
         intent.putExtra("receivedItem", item);
         intent.putExtra("listOfItems", listOfItems);
         actResL.launch(intent);
-
     }
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -201,8 +255,15 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
                 edSearch.setVisibility(View.VISIBLE);
                 imageButtonSearch.setVisibility(View.VISIBLE);
                 break;
+            case "All":
+                listOfSearchItems.clear();
+                rgPositionSearch.setVisibility(View.INVISIBLE);
+                edSearch.setVisibility(View.INVISIBLE);
+                listOfSearchItems.addAll(listOfItems);
+                imageButtonSearch.setVisibility(View.INVISIBLE);
+                itemArrayAdapter.notifyDataSetChanged();
+                break;
         }
-        
     }
 
     @Override

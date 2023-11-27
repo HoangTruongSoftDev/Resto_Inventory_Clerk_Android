@@ -76,42 +76,72 @@ public class StaffActivity extends AppCompatActivity implements View.OnClickList
             finish();
         }
         else if (v.getId() == R.id.btnConsume) {
-            updateQuantity(v,"has been updated.");
+            updateQuantity(v," has been updated.");
+            edQuantityConsumed.setText(null);
         }
 
     }
 
     private void updateQuantity(View v, String message) {
-        try{
+        try {
             String id = edItemId.getText().toString();
             String name = edItemName.getText().toString();
-            String quantity = edQuantity.getText().toString();
+            String currentQuantityStr = edQuantity.getText().toString();
             String measure = edUnitOfMeasure.getText().toString();
             String price = edUnitPrice.getText().toString();
+            String consumedQuantityStr = edQuantityConsumed.getText().toString();
 
-            Item item = new Item(Integer.valueOf(id),name,Integer.valueOf(quantity),measure,Double.valueOf(price));
+            if (consumedQuantityStr.isEmpty()) {
+                Snackbar.make(v, "Please enter consumed quantity", Snackbar.LENGTH_LONG).show();
+                return;
+            }
 
+            int currentQuantity = Integer.parseInt(currentQuantityStr);
+            int consumedQuantity = Integer.parseInt(consumedQuantityStr);
+
+            // Check if there's enough quantity to consume
+            if (consumedQuantity > currentQuantity) {
+                Snackbar.make(v, "Consumed quantity cannot exceed current quantity", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            // Calculate the new quantity after consumption
+            int newQuantity = currentQuantity - consumedQuantity;
+
+            // Update the local Item object
+            Item item = new Item(Integer.valueOf(id), name, newQuantity, measure, Double.valueOf(price));
+
+            // Update the Firebase Database with the new quantity
             itemDatabase.child(id).setValue(item);
+
+            // Clear the consumed quantity input
+            edQuantityConsumed.setText(null);
 
             Intent intent = new Intent();
             intent.putExtra("new_item", item);
             setResult(RESULT_OK, intent);
-            Snackbar.make(v,"The Item with id: " + id + message,Snackbar.LENGTH_LONG).show();
-        }catch (Exception e){
-            Snackbar.make(v,e.getMessage(),Snackbar.LENGTH_LONG).show();
+            Snackbar.make(v, "The Item with id: " + id + message, Snackbar.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
         }
     }
+
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
         Item item = snapshot.getValue(Item.class);
-        Toast.makeText(this,item.toString(),Toast.LENGTH_LONG).show();
         Log.d("FIREBASE",item.toString());
     }
 
     @Override
     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+        if(snapshot.exists()){
+            String quantity = snapshot.child("quantity").getValue().toString();
+            edQuantity.setText(quantity);
+        }
+        else {
+            Toast.makeText(this,"No document",Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
