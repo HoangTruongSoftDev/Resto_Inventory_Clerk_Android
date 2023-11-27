@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 import model.Employee;
 import model.Item;
+import model.ItemArrayAdapter;
 import model.User;
 import model.UserArrayAdapter;
 
@@ -80,36 +81,7 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
         lvItems = findViewById(R.id.lvItems);
         lvItems.setOnItemClickListener(this);
 
-        itemArrayAdapter = new ArrayAdapter<Item>(this, R.layout.single_item_layout, listOfSearchItems) {
-            @NonNull
-            @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                // Use convertView to recycle views for better performance
-                View view = convertView;
-
-                if (view == null) {
-                    // If convertView is null, inflate the layout
-                    LayoutInflater inflater = LayoutInflater.from(getContext());
-                    view = inflater.inflate(R.layout.single_item_layout, parent, false);
-                }
-
-                // Get the item for this position
-                Item item = getItem(position);
-
-                // Find the TextViews in the layout
-                TextView tvItemId = view.findViewById(R.id.tvItemId);
-                TextView tvItemName = view.findViewById(R.id.tvItemName);
-                TextView tvQuantity = view.findViewById(R.id.tvQuantity);
-
-                // Set the data to the TextViews
-                if (item != null) {
-                    tvItemId.setText(String.valueOf(item.getItemId()));
-                    tvItemName.setText(item.getName());
-                    tvQuantity.setText(String.valueOf(item.getQuantity()));
-                }
-                return view;
-            }
-        };
+        itemArrayAdapter = new ItemArrayAdapter(this, R.layout.single_item_layout, listOfSearchItems);
         lvItems.setAdapter(itemArrayAdapter);
 
         String[] searchOptions = {"Item ID", "Item Name","All"};
