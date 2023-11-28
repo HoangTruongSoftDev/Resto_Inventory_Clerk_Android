@@ -35,7 +35,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBaseline_toBaselineOf="@id/tvLabelItemId"
         app:layout_constraintLeft_toRightOf="@id/tvLabelItemId"
         android:layout_marginLeft="30dp"
@@ -56,7 +58,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBaseline_toBaselineOf="@id/tvLabelItemName"
         app:layout_constraintStart_toStartOf="@id/edItemId"
         />
@@ -76,7 +80,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBaseline_toBaselineOf="@id/tvLabelQuantity"
         app:layout_constraintStart_toStartOf="@id/edItemName"
         />
@@ -96,7 +102,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBaseline_toBaselineOf="@id/tvLabelUnitPrice"
         app:layout_constraintStart_toStartOf="@id/edQuantity"
         />
@@ -116,7 +124,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBaseline_toBaselineOf="@id/tvLabelUnitOfMeasure"
         app:layout_constraintStart_toStartOf="@id/edUnitPrice"
         />
@@ -136,7 +146,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBaseline_toBaselineOf="@id/tvTotalPrice"
         app:layout_constraintStart_toStartOf="@id/edUnitOfMeasure"
         />
@@ -155,7 +167,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="number"
         app:layout_constraintBaseline_toBaselineOf="@id/tvQuantityConsumed"
         app:layout_constraintStart_toStartOf="@id/edTotalPrice"
         />
@@ -170,85 +182,16 @@
         app:layout_constraintRight_toRightOf="parent"
         />
 
-    <TextView
-        android:id="@+id/tvLabelMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter Item ID"
-        app:layout_constraintLeft_toLeftOf="@id/edSearch"
-        app:layout_constraintRight_toRightOf="@id/edSearch"
-        app:layout_constraintTop_toBottomOf="@id/tvQuantityConsumed"
-        android:layout_marginTop="30dp"
-        />
-    <TextView
-        android:id="@+id/tvLabelSearchBy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search By"
-        app:layout_constraintStart_toStartOf="@id/tvQuantityConsumed"
-        app:layout_constraintTop_toBottomOf="@id/tvQuantityConsumed"
-        android:layout_marginTop="30dp"
-
-
-        />
-
-    <Spinner
-        android:id="@+id/spinnerListSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/tvLabelSearchBy"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelSearchBy"
-        android:layout_marginTop="10dp"
-        />
-    <EditText
-        android:id="@+id/edSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        app:layout_constraintBaseline_toBaselineOf="@id/spinnerListSearch"
-        app:layout_constraintLeft_toRightOf="@id/spinnerListSearch"
-        />
-    <ImageButton
-        android:id="@+id/imageButtonSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/magnifyingglass"
-        app:layout_constraintLeft_toRightOf="@id/edSearch"
-        app:layout_constraintTop_toBottomOf="@id/tvLabelMessage"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/transparent"
-        />
-
-
     <Button
-        android:id="@+id/btnListAll"
+        android:id="@+id/btnReturn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="List All"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edSearch"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="50dp"
-        />
-
-    <Button
-        android:id="@+id/btnClear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnListAll"
-        app:layout_constraintLeft_toRightOf="@id/btnListAll"
-        android:layout_marginLeft="20dp"
-        />
-
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log Out"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnListAll"
-        app:layout_constraintLeft_toRightOf="@id/btnClear"
-        android:layout_marginLeft="20dp"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="40dp"
+        android:text="Return"
+        tools:layout_editor_absoluteX="169dp"
+        tools:layout_editor_absoluteY="545dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
