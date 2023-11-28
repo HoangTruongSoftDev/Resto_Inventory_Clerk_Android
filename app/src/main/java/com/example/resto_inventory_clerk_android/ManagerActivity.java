@@ -30,7 +30,7 @@ import service.Service;
 public class ManagerActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener {
 
     EditText edItemId, edItemName, edQuantity, edUnitPrice, edUnitOfMeasure,edTotalPrice,edQuantityConsumed,edQuantityImport;
-    Button btnConsume,btnImport,btnSave,btnClear,btnUpdate,btnDelete, btnReturn;
+    Button btnConsume,btnImport,btnSave,btnUpdate,btnDelete, btnReturn;
     Item receivedItem;
     DatabaseReference itemDatabase;
     ArrayList<Item> listOfItems;
@@ -55,7 +55,6 @@ public class ManagerActivity extends AppCompatActivity implements View.OnClickLi
         btnImport = findViewById(R.id.btnImport);
         btnReturn = findViewById(R.id.btnReturn);
         btnSave = findViewById(R.id.btnSave);
-        btnClear = findViewById(R.id.btnClear);
         btnUpdate = findViewById(R.id.btnUpdate);
         btnDelete = findViewById(R.id.btnDelete);
         btnConsume.setOnClickListener(this);
@@ -63,23 +62,23 @@ public class ManagerActivity extends AppCompatActivity implements View.OnClickLi
         btnReturn.setOnClickListener(this);
         btnSave.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
-        btnClear.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
-
 
         listOfItems = new ArrayList<>();
 
         itemDatabase = FirebaseDatabase.getInstance().getReference("Item");
         itemDatabase.addChildEventListener(this);
 
+        listOfItems = (ArrayList<Item>) getIntent().getSerializableExtra("listOfItems");
         receivedItem = (Item) getIntent().getSerializableExtra("receivedItem");
-        edItemId.setText(String.valueOf(receivedItem.getItemId()));
-        edItemName.setText(receivedItem.getName());
-        edQuantity.setText(String.valueOf(receivedItem.getQuantity()));
-        edUnitOfMeasure.setText(receivedItem.getUnitOfMeasure());
-        edUnitPrice.setText(String.valueOf(receivedItem.getUnitPrice()));
-        edTotalPrice.setText(String.valueOf(receivedItem.getUnitPrice()*receivedItem.getQuantity()));
-
+        if (receivedItem != null) {
+            edItemId.setText(String.valueOf(receivedItem.getItemId()));
+            edItemName.setText(receivedItem.getName());
+            edQuantity.setText(String.valueOf(receivedItem.getQuantity()));
+            edUnitOfMeasure.setText(receivedItem.getUnitOfMeasure());
+            edUnitPrice.setText(String.valueOf(receivedItem.getUnitPrice()));
+            edTotalPrice.setText(String.valueOf(receivedItem.getUnitPrice() * receivedItem.getQuantity()));
+        }
     }
 
     @Override
@@ -95,7 +94,74 @@ public class ManagerActivity extends AppCompatActivity implements View.OnClickLi
             importQuantity(v," has been imported.");
             edQuantityImport.setText(null);
         }
+        else if (v.getId() == R.id.btnUpdate){
+            addupdateItem(v," has been updated.");
+        }
+        else if (v.getId() == R.id.btnSave){
+            addupdateItem(v," has been saved.");
+        }
+        else if (v.getId() == R.id.btnDelete){
+            deleteItem(v," has been deleted.");
+        }
 
+    }
+
+    private void deleteItem(View v, String message) {
+        try {
+            String id = edItemId.getText().toString();
+
+            if (id.isEmpty()) {
+                Snackbar.make(v, "Item ID cannot be blank", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+            int itemId = Integer.valueOf(id) - 1;
+            Item deleteItem = listOfItems.get(itemId);
+            Log.d("nan",deleteItem.toString());
+            // Remove the item from the list
+            listOfItems.remove(deleteItem);
+
+            itemDatabase.child(id).removeValue();
+
+            Intent intent = new Intent();
+            intent.putExtra("delete_item", deleteItem);
+            setResult(RESULT_FIRST_USER, intent);
+            Snackbar.make(v, "The Item with id: " + id + message, Snackbar.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void addupdateItem(View v, String message) {
+        try {
+            String id = edItemId.getText().toString();
+            String name = edItemName.getText().toString();
+            String Quantity = edQuantity.getText().toString();
+            String measure = edUnitOfMeasure.getText().toString();
+            String price = edUnitPrice.getText().toString();
+
+            if (id.isEmpty() || name.isEmpty() || Quantity.isEmpty() || measure.isEmpty() || price.isEmpty()) {
+                Snackbar.make(v, "Cannot be blank", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            int newQuantity = Integer.parseInt(Quantity);
+
+            // Update the local Item object
+            Item item = new Item(Integer.valueOf(id), name, newQuantity, measure, Double.valueOf(price));
+
+            // Update the Firebase Database with the new quantity
+            itemDatabase.child(id).setValue(item);
+
+            // Clear the consumed quantity input
+            edQuantityImport.setText(null);
+
+            Intent intent = new Intent();
+            intent.putExtra("new_item", item);
+            setResult(RESULT_OK, intent);
+            Snackbar.make(v, "The Item with id: " + id + message, Snackbar.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private void importQuantity(View v, String message) {

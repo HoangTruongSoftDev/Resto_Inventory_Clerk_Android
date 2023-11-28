@@ -222,32 +222,23 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
-        android:id="@+id/btnClear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Clear"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
-        app:layout_constraintLeft_toRightOf="@id/btnSave"
-        android:layout_marginLeft="20dp"
-        />
-
-    <Button
         android:id="@+id/btnUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
         app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
-        app:layout_constraintLeft_toRightOf="@id/btnClear"
-        android:layout_marginLeft="20dp"/>
+        app:layout_constraintLeft_toRightOf="@id/btnSave"
+        android:layout_marginStart="20dp"
+        />
 
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
-        app:layout_constraintStart_toStartOf="@id/btnSave"
-        app:layout_constraintTop_toBottomOf="@id/btnSave"
-        android:layout_marginTop="20dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
+        app:layout_constraintLeft_toRightOf="@id/btnUpdate"
+        android:layout_marginStart="20dp"
         />
 
     <Button
@@ -255,8 +246,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Return"
-        app:layout_constraintBaseline_toBaselineOf="@id/btnDelete"
-        app:layout_constraintLeft_toRightOf="@id/btnDelete"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="20dp"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import model.Item;
 import model.ItemArrayAdapter;
@@ -36,7 +37,7 @@ import model.ItemArrayAdapter;
 public class ManagerItemListActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener,
         AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener {
 
-    ImageButton imageButtonSearch;
+    ImageButton imageButtonAdd,imageButtonSearch;
     ListView lvItems;
     Button btnLogOut, btnAdvanced,btnOrder;
     ArrayList<Item> listOfItems, listOfSearchItems;
@@ -56,6 +57,7 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
 
     private void initialize() {
 
+        imageButtonAdd = findViewById(R.id.imageButtonAdd);
         imageButtonSearch = findViewById(R.id.imageButtonSearch);
         btnLogOut = findViewById(R.id.btnLogOut);
         btnAdvanced = findViewById(R.id.btnAdvanced);
@@ -66,6 +68,7 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
         rbNameSearch = findViewById(R.id.rbNameSearch);
         edSearch = findViewById(R.id.edSearch);
 
+        imageButtonAdd.setOnClickListener(this);
         btnLogOut.setOnClickListener(this);
         btnAdvanced.setOnClickListener(this);
         btnOrder.setOnClickListener(this);
@@ -117,6 +120,32 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
                             }
                             itemArrayAdapter.notifyDataSetChanged();
                         }
+                        else if (o.getResultCode() == RESULT_FIRST_USER) {
+                            Item receivedItem = (Item) o.getData().getSerializableExtra("delete_item");
+
+                            // Remove the item from listOfItems using Iterator
+                            Iterator<Item> iterator = listOfItems.iterator();
+                            while (iterator.hasNext()) {
+                                Item currentItem = iterator.next();
+                                if (currentItem.getItemId() == receivedItem.getItemId()) {
+                                    iterator.remove();
+                                    break;
+                                }
+                            }
+
+                            // Remove the item from listOfSearchItems using Iterator
+                            iterator = listOfSearchItems.iterator();
+                            while (iterator.hasNext()) {
+                                Item currentItem = iterator.next();
+                                if (currentItem.getItemId() == receivedItem.getItemId()) {
+                                    iterator.remove();
+                                    break;
+                                }
+                            }
+
+                            itemArrayAdapter.notifyDataSetChanged();
+                        }
+
                     }
                 }
         );
@@ -128,6 +157,11 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
             finish();
         } else if (v.getId() == R.id.imageButtonSearch) {
             searchItem(String.valueOf(spinnerListSearch.getSelectedItem()));
+        }
+        else if (v.getId() == R.id.imageButtonAdd) {
+            Intent intent = new Intent(this, ManagerActivity.class);
+            intent.putExtra("listOfItems", listOfItems);
+            actResL.launch(intent);
         }
     }
 
