@@ -1,5 +1,7 @@
 package com.example.resto_inventory_clerk_android;
 
+import static model.ThresholdWarning.checkThresholdsAndShowWarnings;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -37,11 +40,12 @@ import java.util.ArrayList;
 import model.Employee;
 import model.Item;
 import model.ItemArrayAdapter;
+import model.ThresholdWarning;
 import model.User;
 import model.UserArrayAdapter;
 
-public class StaffItemListActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener, 
-        AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener {
+public class StaffItemListActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener,
+        AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, ThresholdWarning.ThresholdCheckerListener {
 
     ImageButton imageButtonSearch;
     ListView lvItems;
@@ -59,6 +63,8 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_itemlist);
         initialize();
+        checkThresholdsAndShowWarnings( FirebaseDatabase.getInstance().getReference("Item"), FirebaseDatabase.getInstance().getReference("Threshold"), FirebaseDatabase.getInstance().getReference("Order"),this);
+
     }
 
     private void initialize() {
@@ -240,6 +246,18 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void onOrderAdded() {
+        Toast.makeText(this, "Order added successfully", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onQuantityBelowThreshold(Item item) {
+        Toast.makeText(this, "Item "+item.getItemId()+" "+item.getName()+" quantity is below the threshold minimum quantity(current "+item.getQuantity()+")", Toast.LENGTH_LONG).show();
 
     }
 }
