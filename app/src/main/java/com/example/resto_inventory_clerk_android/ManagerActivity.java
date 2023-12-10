@@ -211,6 +211,7 @@ public class ManagerActivity extends AppCompatActivity implements View.OnClickLi
             String price = edUnitPrice.getText().toString();
             String consumedQuantityStr = edQuantityConsumed.getText().toString();
 
+
             if (consumedQuantityStr.isEmpty()) {
                 Snackbar.make(v, "Please enter consumed quantity", Snackbar.LENGTH_LONG).show();
                 return;

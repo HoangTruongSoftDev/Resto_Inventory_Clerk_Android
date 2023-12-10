@@ -1,5 +1,7 @@
 package com.example.resto_inventory_clerk_android;
 
+import static model.ThresholdWarning.checkThresholdsAndShowWarnings;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,6 +23,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -33,9 +36,10 @@ import java.util.Iterator;
 
 import model.Item;
 import model.ItemArrayAdapter;
+import model.ThresholdWarning;
 
 public class ManagerItemListActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener,
-        AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener {
+        AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, ThresholdWarning.ThresholdCheckerListener {
 
     ImageButton imageButtonAdd,imageButtonSearch;
     ListView lvItems;
@@ -53,6 +57,7 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_itemlist);
         initialize();
+        checkThresholdsAndShowWarnings( FirebaseDatabase.getInstance().getReference("Item"), FirebaseDatabase.getInstance().getReference("Threshold"), FirebaseDatabase.getInstance().getReference("Order"),this);
     }
 
     private void initialize() {
@@ -168,6 +173,11 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
             //intent.putExtra("listOfItems", listOfItems);
             actResL.launch(intent);
         }
+        else if(v.getId() == R.id.btnAdvanced){
+            Intent intent = new Intent(this, AdvancedThresholdActivity.class);
+            //intent.putExtra("listOfItems", listOfItems);
+            actResL.launch(intent);
+        }
     }
 
 
@@ -276,6 +286,18 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
+    public void onOrderAdded() {
+        Toast.makeText(this, "Order added successfully", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onQuantityBelowThreshold(Item item) {
+        Toast.makeText(this, "Item "+item.getItemId()+" "+item.getName()+" quantity is below the threshold minimum quantity(current "+item.getQuantity()+")", Toast.LENGTH_LONG).show();
 
     }
 }

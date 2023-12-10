@@ -10,8 +10,11 @@ public class Order implements Serializable {
     private Double unitPrice;
     private String unitOfMeasure;
     private  double totalPrice;
-
-    public Order(String itemName, String nameOnCard, int orderId, int quantities, Double unitPrice, String unitOfMeasure, double totalPrice) {
+    private  String cardNum;
+    private String date;
+    public Order(){};
+    public Order(String itemName, String nameOnCard, int orderId, int quantities, Double unitPrice,
+                 String unitOfMeasure, double totalPrice, String cardNum,String date) {
         this.itemName = itemName;
         this.nameOnCard = nameOnCard;
         this.orderId = orderId;
@@ -19,6 +22,8 @@ public class Order implements Serializable {
         this.unitPrice = unitPrice;
         this.unitOfMeasure = unitOfMeasure;
         this.totalPrice = totalPrice;
+        this.cardNum = cardNum;
+        this.date = date;
     }
 
     public int getQuantities() {
@@ -75,5 +80,21 @@ public class Order implements Serializable {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getCardNum() {
+        return cardNum;
+    }
+
+    public void setCardNum(String cardNum) {
+        this.cardNum = cardNum;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

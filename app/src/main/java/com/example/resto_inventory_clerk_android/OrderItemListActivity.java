@@ -30,9 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 
-import model.Item;
-import model.ItemArrayAdapter;
+
 import model.Order;
 import model.OrderArrayAdapter;
 
@@ -54,6 +54,7 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_item_list);
         initialize();
+        Log.d("OrderItemListActivity", "onCreate: Here");
     }
     private void initialize() {
 
@@ -74,24 +75,40 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
 
         listOfOrders = new ArrayList<>();
         listOfSearchOrder = new ArrayList<>();
-        firebaseDatabase = FirebaseDatabase.getInstance().getReference();
+
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference("Order");
         firebaseDatabase.addChildEventListener(this);
         lvOrders = findViewById(R.id.lvOrders);
         lvOrders.setOnItemClickListener(this);
 
-        orderArrayAdapter = new OrderArrayAdapter(this, R.layout.single_order_layout, listOfOrders);
+        orderArrayAdapter = new OrderArrayAdapter(this, R.layout.single_order_layout, listOfSearchOrder);
         lvOrders.setAdapter(orderArrayAdapter);
 
-        String[] searchOptions = {"Order ID", "Item Name","All"};
+
+        String[] searchOptions = {"Date","Item Name","All"};
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item , searchOptions);
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerListSearch.setAdapter(adapterSpinner);
+
+
         spinnerListSearch.setOnItemSelectedListener(this);
-        spinnerListSearch.setSelection(2);
+
+
+
+
         rgPositionSearch.setVisibility(View.INVISIBLE);
+
+
         edSearch.setVisibility(View.INVISIBLE);
+
+
         imageButtonSearch.setVisibility(View.INVISIBLE);
+
+
+
         registerActResL();
+        Log.d("OrderItemListActivity", "init");
+
     }
 
     private void registerActResL() {
@@ -101,7 +118,9 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onActivityResult(ActivityResult o) {
                         if (o.getResultCode() == RESULT_OK) {
+                            Log.println(Log.ERROR,"debug","here3");
                             Order receivedOrder = (Order) o.getData().getSerializableExtra("new_order");
+                            Log.println(Log.ERROR,"debug","here4");
                             for (int i = 0; i < listOfOrders.size(); i++) {
                                 Order currentItem = listOfOrders.get(i);
                                 if (currentItem.getOrderId() == receivedOrder.getOrderId()) {
@@ -118,35 +137,14 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
                             }
                             orderArrayAdapter.notifyDataSetChanged();
                         }
-                        else if (o.getResultCode() == RESULT_FIRST_USER) {
-                            Order receivedItem = (Order) o.getData().getSerializableExtra("delete_order");
 
-                            // Remove the item from listOfItems using Iterator
-                            Iterator<Order> iterator = listOfOrders.iterator();
-                            while (iterator.hasNext()) {
-                                Order currentItem = iterator.next();
-                                if (currentItem.getOrderId() == receivedItem.getOrderId()) {
-                                    iterator.remove();
-                                    break;
-                                }
-                            }
-
-                            // Remove the item from listOfSearchItems using Iterator
-                            iterator = listOfSearchOrder.iterator();
-                            while (iterator.hasNext()) {
-                                Order currentItem = iterator.next();
-                                if (currentItem.getOrderId() == receivedItem.getOrderId()) {
-                                    iterator.remove();
-                                    break;
-                                }
-                            }
-
-                            orderArrayAdapter.notifyDataSetChanged();
-                        }
 
                     }
                 }
         );
+        Log.d("OrderItemListActivity", "register");
+
+
     }
 
     @Override
@@ -154,11 +152,12 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
         if (v.getId() == R.id.btnReturn) {
             finish();
         } else if (v.getId() == R.id.imageButtonSearch) {
+            Log.d("TAG", "onClick:button ");
             searchItem(String.valueOf(spinnerListSearch.getSelectedItem()));
         }
         else if (v.getId() == R.id.imageButtonAdd) {
             Intent intent = new Intent(this, OrderActivity.class);
-            intent.putExtra("listOfItems", listOfOrders);
+            //intent.putExtra("listOfItems", listOfOrders);
             actResL.launch(intent);
         }
 
@@ -168,25 +167,19 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
     private void searchItem(String searchOption) {
         listOfSearchOrder.clear();
         switch (searchOption) {
-            case "Order ID":
-                String searchItemIdStr = edSearch.getText().toString().trim();
-                if (!searchItemIdStr.isEmpty()) {
-                    try {
-                        int searchItemId = Integer.parseInt(searchItemIdStr);
-                        for (Order currentItem : listOfSearchOrder) {
-                            if (currentItem.getOrderId() == searchItemId) {
-                                listOfSearchOrder.add(currentItem);
-                            }
-                        }
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
+            case "Date":
+                String searchItemDate = edSearch.getText().toString().trim();
+                Log.d("Date", "searchItem: Date");
+                for (Order currentItem : listOfOrders) {
+                    if (currentItem.getDate().contains(searchItemDate)) {
+                        listOfSearchOrder.add(currentItem);
                     }
                 }
                 break;
             case "Item Name":
                 String searchItemName = edSearch.getText().toString().trim();
                 for (Order currentItem : listOfOrders) {
-                    if (currentItem.getItemName().equalsIgnoreCase(searchItemName)) {
+                    if (currentItem.getItemName().toLowerCase().contains(searchItemName.toLowerCase())) {
                         listOfSearchOrder.add(currentItem);
                     }
                 }
@@ -232,11 +225,11 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, ManagerActivity.class);
-        Order item = listOfSearchOrder.get(position);
+        //Intent intent = new Intent(this, ManagerActivity.class);
+        //Order item = listOfSearchOrder.get(position);
         //intent.putExtra("receivedItem", item);
-        intent.putExtra("listOfItems", listOfOrders);
-        actResL.launch(intent);
+        //intent.putExtra("listOfItems", listOfOrders);
+        //actResL.launch(intent);
     }
 
 
@@ -245,8 +238,8 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
         edSearch.setText(null);
         rgPositionSearch.clearCheck();
         switch (String.valueOf(parent.getItemAtPosition(position))) {
-            case "Item ID":
-                edSearch.setHint("Enter Item ID");
+            case "Date":
+                edSearch.setHint("Enter Date");
                 rgPositionSearch.setVisibility(View.INVISIBLE);
                 edSearch.setVisibility(View.VISIBLE);
                 imageButtonSearch.setVisibility(View.VISIBLE);
