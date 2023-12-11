@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class Order implements Serializable {
     private  String itemName;
     private  String nameOnCard;
-    private  int orderId;
     private int quantities;
     private Double unitPrice;
     private String unitOfMeasure;
@@ -13,11 +12,10 @@ public class Order implements Serializable {
     private  String cardNum;
     private String date;
     public Order(){};
-    public Order(String itemName, String nameOnCard, int orderId, int quantities, Double unitPrice,
+    public Order(String itemName, String nameOnCard, int quantities, Double unitPrice,
                  String unitOfMeasure, double totalPrice, String cardNum,String date) {
         this.itemName = itemName;
         this.nameOnCard = nameOnCard;
-        this.orderId = orderId;
         this.quantities = quantities;
         this.unitPrice = unitPrice;
         this.unitOfMeasure = unitOfMeasure;
@@ -58,13 +56,6 @@ public class Order implements Serializable {
         this.nameOnCard = nameOnCard;
     }
 
-    public int getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
-    }
 
     public Double getUnitPrice() {
         return unitPrice;

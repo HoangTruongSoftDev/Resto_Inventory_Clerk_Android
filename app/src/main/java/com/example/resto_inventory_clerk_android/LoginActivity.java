@@ -1,5 +1,7 @@
 package com.example.resto_inventory_clerk_android;
 
+import static model.ThresholdWarning.checkThresholdsAndShowWarnings;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import model.Item;
+import model.ThresholdWarning;
 import model.User;
 import service.Validator;
 
@@ -143,7 +147,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         startActivity(intent);
     }
-
     @Override
     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
         User currentUser = snapshot.getValue(User.class);

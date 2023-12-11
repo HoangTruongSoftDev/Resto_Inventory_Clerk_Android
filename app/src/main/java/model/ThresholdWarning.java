@@ -26,6 +26,7 @@ public class ThresholdWarning {
         itemDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot itemSnapshot) {
+
                 for (DataSnapshot itemData : itemSnapshot.getChildren()) {
                     String itemId = itemData.getKey();
 
@@ -55,20 +56,20 @@ public class ThresholdWarning {
                             public void onDataChange(@NonNull DataSnapshot thresholdSnapshot) {
                                 if (thresholdSnapshot.exists()) {
                                     Threshold threshold = thresholdSnapshot.getValue(Threshold.class);
-
                                     if (threshold != null) {
+
                                         int itemQuantity = item.getQuantity();
                                         int thresholdMinQuantity = threshold.getMinQuantity();
                                         boolean isAutoOrder = threshold.isAutoOrder();
-
                                         if (isAutoOrder && itemQuantity < thresholdMinQuantity) {
                                             // Add an order to Firebase
                                             SimpleDateFormat currentDate = new SimpleDateFormat("dd/MM/yyyy");
                                             Date todayDate = new Date();
                                             String date = currentDate.format(todayDate);
                                             double total  = threshold.getPrice() *threshold.getOrderAmount();
-                                            Order neworder = new Order(item.getName(), threshold.getNameOnCard(), 1000,
+                                            Order neworder = new Order(item.getName(), threshold.getNameOnCard(),
                                                     threshold.getOrderAmount(),threshold.getPrice(),item.getUnitOfMeasure(),total,threshold.getCardNum(),date);
+
                                             addOrder(orderDB, neworder);
                                             item.setQuantity(thresholdMinQuantity+threshold.getOrderAmount());
                                             itemDB.child(itemId).setValue(item);
@@ -79,6 +80,7 @@ public class ThresholdWarning {
                                             listener.onQuantityBelowThreshold(item);
                                         }
                                     }
+
                                 }
                             }
 
@@ -104,9 +106,12 @@ public class ThresholdWarning {
         // For simplicity, this example assumes an Order class with an addItem method
 
         try {
+            Log.d("Result", "RIGHT");
             orderDB.push().setValue(order);
+            Log.d("Result", "RIGHT1");
         }
         catch (Exception e){
+            Log.d("Result", "WRONG");
             return "Could not order "+ e.getMessage();
         }
         return "Auto ordered";

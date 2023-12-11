@@ -106,51 +106,52 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
 
 
 
-        registerActResL();
+        //registerActResL();
         Log.d("OrderItemListActivity", "init");
 
     }
 
-    private void registerActResL() {
-        actResL = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult o) {
-                        if (o.getResultCode() == RESULT_OK) {
-                            Log.println(Log.ERROR,"debug","here3");
-                            Order receivedOrder = (Order) o.getData().getSerializableExtra("new_order");
-                            Log.println(Log.ERROR,"debug","here4");
-                            for (int i = 0; i < listOfOrders.size(); i++) {
-                                Order currentItem = listOfOrders.get(i);
-                                if (currentItem.getOrderId() == receivedOrder.getOrderId()) {
-                                    listOfOrders.set(i, receivedOrder);
-                                    break;
-                                }
-                            }
-                            for (int i = 0; i < listOfSearchOrder.size(); i++) {
-                                Order currentOrder = listOfSearchOrder.get(i);
-                                if (currentOrder.getOrderId() == receivedOrder.getOrderId()) {
-                                    listOfSearchOrder.set(i, receivedOrder);
-                                    break;
-                                }
-                            }
-                            orderArrayAdapter.notifyDataSetChanged();
-                        }
-
-
-                    }
-                }
-        );
-        Log.d("OrderItemListActivity", "register");
-
-
-    }
+//    private void registerActResL() {
+//        actResL = registerForActivityResult(
+//                new ActivityResultContracts.StartActivityForResult(),
+//                new ActivityResultCallback<ActivityResult>() {
+//                    @Override
+//                    public void onActivityResult(ActivityResult o) {
+//                        if (o.getResultCode() == RESULT_OK) {
+//                            Log.println(Log.ERROR,"debug","here3");
+//                            Order receivedOrder = (Order) o.getData().getSerializableExtra("new_order");
+//                            Log.println(Log.ERROR,"debug","here4");
+//                            for (int i = 0; i < listOfOrders.size(); i++) {
+//                                Order currentItem = listOfOrders.get(i);
+//                                if (currentItem.getOrderId() == receivedOrder.getOrderId()) {
+//                                    listOfOrders.set(i, receivedOrder);
+//                                    break;
+//                                }
+//                            }
+//                            for (int i = 0; i < listOfSearchOrder.size(); i++) {
+//                                Order currentOrder = listOfSearchOrder.get(i);
+//                                if (currentOrder.getOrderId() == receivedOrder.getOrderId()) {
+//                                    listOfSearchOrder.set(i, receivedOrder);
+//                                    break;
+//                                }
+//                            }
+//                            orderArrayAdapter.notifyDataSetChanged();
+//                        }
+//
+//
+//                    }
+//                }
+//        );
+//        Log.d("OrderItemListActivity", "register");
+//
+//
+//    }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnReturn) {
-            finish();
+           Intent intent = new Intent(this, ManagerItemListActivity.class);
+           startActivity(intent);
         } else if (v.getId() == R.id.imageButtonSearch) {
             Log.d("TAG", "onClick:button ");
             searchItem(String.valueOf(spinnerListSearch.getSelectedItem()));
@@ -158,7 +159,8 @@ public class OrderItemListActivity extends AppCompatActivity implements View.OnC
         else if (v.getId() == R.id.imageButtonAdd) {
             Intent intent = new Intent(this, OrderActivity.class);
             //intent.putExtra("listOfItems", listOfOrders);
-            actResL.launch(intent);
+            //actResL.launch(intent);
+            startActivity(intent);
         }
 
     }

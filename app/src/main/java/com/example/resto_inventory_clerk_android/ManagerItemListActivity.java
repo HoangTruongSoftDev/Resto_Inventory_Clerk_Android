@@ -56,8 +56,9 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_itemlist);
-        initialize();
+
         checkThresholdsAndShowWarnings( FirebaseDatabase.getInstance().getReference("Item"), FirebaseDatabase.getInstance().getReference("Threshold"), FirebaseDatabase.getInstance().getReference("Order"),this);
+        initialize();
     }
 
     private void initialize() {
@@ -159,7 +160,8 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnLogOut) {
-            finish();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         } else if (v.getId() == R.id.imageButtonSearch) {
             searchItem(String.valueOf(spinnerListSearch.getSelectedItem()));
         }
@@ -202,7 +204,7 @@ public class ManagerItemListActivity extends AppCompatActivity implements View.O
             case "Item Name":
                 String searchItemName = edSearch.getText().toString().trim();
                 for (Item currentItem : listOfItems) {
-                    if (currentItem.getName().equalsIgnoreCase(searchItemName)) {
+                    if (currentItem.getName().toLowerCase().contains(searchItemName.toLowerCase())) {
                         listOfSearchItems.add(currentItem);
                     }
                 }

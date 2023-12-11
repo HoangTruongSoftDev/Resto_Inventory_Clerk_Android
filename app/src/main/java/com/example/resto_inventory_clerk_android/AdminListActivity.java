@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -98,6 +100,7 @@ public class AdminListActivity extends AppCompatActivity implements View.OnClick
         lvUsers.setAdapter(userAdapter);
 
         String[] searchOptions = {"User ID", "First Name", "Last Name", "Email", "Position", "All"};
+
         ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, searchOptions);
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerListSearch.setAdapter(adapterSpinner);
@@ -242,7 +245,7 @@ public class AdminListActivity extends AppCompatActivity implements View.OnClick
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         selectedEmployeeId = listOfSearchEmployees.get(position).getEmployeeId();
         alertDialog.create().show();
-        return false;
+        return true;
     }
     @Override
     public void onClick(View view) {

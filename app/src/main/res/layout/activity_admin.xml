@@ -70,13 +70,15 @@
             android:id="@+id/rbManager"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Manager" />
+            android:text="Manager"
+            />
 
         <RadioButton
             android:id="@+id/rbStaff"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Staff" />
+            android:text="Staff"
+            />
     </RadioGroup>
 
     <TextView
@@ -182,13 +184,14 @@
         app:layout_constraintTop_toBottomOf="@id/tvPassword"
         android:layout_marginTop="60dp"
         android:layout_marginLeft="50dp"
+        android:background="@drawable/button_background"
         />
     <Button
         android:id="@+id/btnDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
-
+        android:background="@drawable/button_background"
         app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
         app:layout_constraintLeft_toRightOf="@id/btnSave"
         android:layout_marginLeft="20dp"
@@ -202,6 +205,7 @@
         app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
         app:layout_constraintLeft_toRightOf="@id/btnDelete"
         android:layout_marginLeft="20dp"
+        android:background="@drawable/button_background"
         />
 
 
@@ -216,6 +220,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="30dp"
         android:layout_marginRight="30dp"
+        android:background="@drawable/button_background"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

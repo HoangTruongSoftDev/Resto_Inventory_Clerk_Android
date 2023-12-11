@@ -32,7 +32,7 @@ import model.Order;
 
 public class OrderActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener, TextWatcher {
 
-    EditText edItemId, edItemName,edQuantity,edPricePer,edUofMeasure,edCardNumber,
+    EditText  edItemName,edQuantity,edPricePer,edUofMeasure,edCardNumber,
             edNameOnCard,edExpirationDate,edCSV;
     Button btnPlaceOrder,btnCancel;
     TextView tvTotalPriceAmount;
@@ -46,7 +46,6 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
         initialize();
     }
     private void initialize(){
-        edItemId = findViewById(R.id.edItemId);
         edItemName = findViewById(R.id.edItemName);
         edQuantity = findViewById(R.id.edQuantity);
         edPricePer = findViewById(R.id.edPricePer);
@@ -72,7 +71,8 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.btnCancel){
-            finish();
+            Intent intent = new Intent(this, OrderItemListActivity.class);
+            startActivity(intent);
         }
         else if(v.getId()==R.id.btnPlaceOrder){
             placeOrder(v);
@@ -81,7 +81,6 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
 
     private void placeOrder(View v) {
         try {
-            String id = edItemId.getText().toString();
             String name = edItemName.getText().toString();
             String Quantity = edQuantity.getText().toString();
             String measure = edUofMeasure.getText().toString();
@@ -90,7 +89,7 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
             String nameOnCard = edNameOnCard.getText().toString();
 
             double totalPrice = Double.valueOf(Quantity)*Double.valueOf(price);
-            if (id.isEmpty() || name.isEmpty() || Quantity.isEmpty() || measure.isEmpty()
+            if (name.isEmpty() || Quantity.isEmpty() || measure.isEmpty()
                     || price.isEmpty() || cardNum.isEmpty()|| nameOnCard.isEmpty()) {
                 Snackbar.make(v, "Cannot be blank", Snackbar.LENGTH_LONG).show();
                 return;
@@ -101,35 +100,36 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
             String date = currentDate.format(todayDate);
 
             // Update the local Item object
-            Order o = new Order( name,  nameOnCard,  Integer.valueOf(id), Integer.valueOf(Quantity) ,
+            Order o = new Order( name,  nameOnCard, Integer.valueOf(Quantity) ,
                     Double.valueOf(price), measure, totalPrice, cardNum, date);
 
             // Update the Firebase Database with the new quantity
-            orderDb.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()){
-                        Snackbar.make(v, "This order id existed please use another one", Snackbar.LENGTH_LONG).show();
-
-                        return;
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-            orderDb.child(id).setValue(o);
+//            orderDb.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    if(snapshot.exists()){
+//                        Snackbar.make(v, "This order id existed please use another one", Snackbar.LENGTH_LONG).show();
+//
+//                        return;
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+            orderDb.push().setValue(o);
+//            orderDb.child(id).setValue(o);
 
             // Clear the consumed quantity input
 
 
             //setResult(RESULT_OK, intent);
 
-            Intent intent = new Intent();
-            intent.putExtra("new_order", o);
-            setResult(RESULT_OK, intent);
+//            Intent intent = new Intent();
+//            intent.putExtra("new_order", o);
+//            setResult(RESULT_OK, intent);
             Snackbar.make(v, "Order has been placed", Snackbar.LENGTH_LONG).show();
         } catch (Exception e) {
             Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
