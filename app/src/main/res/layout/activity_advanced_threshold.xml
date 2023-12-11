@@ -4,157 +4,170 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OrderActivity">
+    tools:context=".AdminActivity"
+    android:id="@+id/layoutAdminActivity"
+    >
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Place Order"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="Advanced"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:textColor="@color/black"
-        android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textSize="20sp"
         />
 
     <TextView
-        android:id="@+id/tvItemId"
+        android:id="@+id/tvLabelItemId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item Id"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="25dp"
+        android:text="Item ID"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        />
+    <Spinner
+        android:id="@+id/spinnerListSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelItemId"
+        app:layout_constraintLeft_toRightOf="@id/tvLabelItemId"
+        android:layout_marginLeft="40dp"
+        />
+
+
+    <TextView
+        android:id="@+id/tvLabelIsAutoOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Auto Order"
+        app:layout_constraintStart_toStartOf="@id/tvLabelItemId"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelItemId"
+        android:layout_marginTop= "35dp"
+        />
+    <Switch
+        android:id="@+id/swAutoOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelIsAutoOrder"
+        app:layout_constraintStart_toStartOf="@id/spinnerListSearch"
+        />
+
+
+    <TextView
+        android:id="@+id/tvLabelMinQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MinQuantity"
+        app:layout_constraintStart_toStartOf="@id/tvLabelIsAutoOrder"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelIsAutoOrder"
+        android:layout_marginTop="30dp"
+        />
+
+    <EditText
+        android:id="@+id/edMinQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelMinQuantity"
+        app:layout_constraintStart_toStartOf="@id/swAutoOrder"
         />
 
     <TextView
-        android:id="@+id/tvItemName"
+        android:id="@+id/tvLabelOrderAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item Name"
-        android:textSize="20sp"
-        android:textColor="@color/black"
+        android:text="Order Amount"
+        app:layout_constraintStart_toStartOf="@id/tvLabelMinQuantity"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelMinQuantity"
+        android:layout_marginTop="30dp"
+        />
 
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@id/tvItemId"
-        app:layout_constraintTop_toBottomOf="@id/tvItemId"/>
-
-    <TextView
-        android:id="@+id/tvQuantity"
+    <EditText
+        android:id="@+id/edOrderAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quantity"
-
-        android:textSize="20sp"
-        android:textColor="@color/black"
-
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@id/tvItemId"
-        app:layout_constraintTop_toBottomOf="@id/tvItemName"/>
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvLabelOrderAmount"
+        app:layout_constraintStart_toStartOf="@id/edMinQuantity"
+        />
 
     <TextView
-        android:id="@+id/tvPricePer"
+        android:id="@+id/tvPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Price"
-
-        android:textSize="20sp"
-        android:textColor="@color/black"
-
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@id/tvItemId"
-        app:layout_constraintTop_toBottomOf="@id/tvQuantity"/>
-
-    <TextView
-        android:id="@+id/tvUofMeasure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Unit Of Measure"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@id/tvItemId"
-        app:layout_constraintTop_toBottomOf="@id/tvPricePer"/>
-
-    <TextView
-        android:id="@+id/tvTotalPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total Price"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="@id/tvItemId"
-        app:layout_constraintTop_toBottomOf="@id/tvUofMeasure"/>
-
-    <EditText
-        android:id="@+id/edItemId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text=""
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="20dp"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvItemId"
-
+        app:layout_constraintStart_toStartOf="@id/tvLabelOrderAmount"
+        app:layout_constraintTop_toBottomOf="@id/tvLabelOrderAmount"
+        android:layout_marginTop="30dp"
         />
 
     <EditText
-        android:id="@+id/edItemName"
+        android:id="@+id/edPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text=""
-        app:layout_constraintStart_toStartOf="@id/edItemId"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvItemName"/>
-
-    <EditText
-        android:id="@+id/edQuantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text=""
-        app:layout_constraintStart_toStartOf="@id/edItemId"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvQuantity"/>
-
-    <EditText
-        android:id="@+id/edPricePer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text=""
-        app:layout_constraintStart_toStartOf="@id/edItemId"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvPricePer"/>
-    <EditText
-        android:id="@+id/edUofMeasure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text=""
-        app:layout_constraintStart_toStartOf="@id/edItemId"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvUofMeasure"/>
+        app:layout_constraintBaseline_toBaselineOf="@id/tvPrice"
+        app:layout_constraintStart_toStartOf="@id/edMinQuantity"
+        />
 
 
-    <TextView
-        android:id="@+id/tvTotalPriceAmount"
+    <Button
+        android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/edItemId"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvTotalPrice"/>
+        android:text="Save"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvCSV"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="50dp"
+        />
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        app:layout_constraintLeft_toRightOf="@id/btnSave"
+        app:layout_constraintRight_toLeftOf="@id/btnClear"
+        app:layout_constraintBaseline_toBaselineOf="@id/btnClear"
+
+        />
+
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear"
+        app:layout_constraintBaseline_toBaselineOf="@id/btnSave"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="50dp"
+        />
+
+
+
+
+    <Button
+        android:id="@+id/btnReturn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Return"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp"
+        />
 
     <TextView
         android:id="@+id/tvPay"
@@ -162,11 +175,12 @@
         android:layout_height="wrap_content"
         android:text="Payment"
         android:textSize="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="40dp"
         android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalPrice"
+        app:layout_constraintTop_toBottomOf="@id/tvPrice"
+
         />
 
     <TextView
@@ -178,7 +192,7 @@
         android:layout_marginTop="10dp"
 
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
+        app:layout_constraintStart_toStartOf="@id/tvLabelOrderAmount"
         app:layout_constraintTop_toBottomOf="@id/tvPay"
         />
 
@@ -190,11 +204,11 @@
         android:textSize="20dp"
         android:layout_marginTop="10dp"
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
+        app:layout_constraintStart_toStartOf="@id/tvCardNumber"
         app:layout_constraintTop_toBottomOf="@id/tvCardNumber" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/tvExpirationDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Expiration date"
@@ -202,11 +216,11 @@
         android:layout_marginTop="10dp"
 
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
+        app:layout_constraintStart_toStartOf="@id/tvCardNumber"
         app:layout_constraintTop_toBottomOf="@id/textView11"/>
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/tvCSV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CSV"
@@ -214,8 +228,8 @@
         android:layout_marginTop="10dp"
 
         android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@id/tvTotalPrice"
-        app:layout_constraintTop_toBottomOf="@id/textView12" />
+        app:layout_constraintStart_toStartOf="@id/tvCardNumber"
+        app:layout_constraintTop_toBottomOf="@id/tvExpirationDate" />
 
     <EditText
         android:id="@+id/edCardNumber"
@@ -247,7 +261,7 @@
         android:ems="10"
         android:inputType="text"
         android:text=""
-        app:layout_constraintBaseline_toBaselineOf="@id/textView12"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvExpirationDate"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="20dp"/>
 
@@ -258,28 +272,8 @@
         android:ems="10"
         android:inputType="text"
         android:text=""
-        app:layout_constraintBaseline_toBaselineOf="@id/textView13"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvCSV"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="20dp" />
 
-    <Button
-        android:id="@+id/btnPlaceOrder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Place Order"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancel"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>

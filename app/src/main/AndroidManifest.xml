@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Resto_Inventory_Clerk_Android"
         tools:targetApi="31">
         <activity
+            android:name=".AdvancedThresholdActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OrderItemListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ManagerItemListActivity"
             android:exported="false" />
         <activity
