@@ -1,7 +1,5 @@
 package com.example.resto_inventory_clerk_android;
 
-import static model.ThresholdWarning.checkThresholdsAndShowWarnings;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -10,13 +8,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,8 +21,6 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,22 +29,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Locale;
 
-import model.Employee;
-import model.Item;
-import model.ItemArrayAdapter;
-import model.ThresholdWarning;
-import model.User;
-import model.UserArrayAdapter;
 
-public class StaffItemListActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener,
-        AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener, ThresholdWarning.ThresholdCheckerListener {
+import model.Order;
+import model.OrderArrayAdapter;
 
-    ImageButton imageButtonSearch;
-    ListView lvItems;
-    Button btnLogOut;
-    ArrayList<Item> listOfItems, listOfSearchItems;
-    ArrayAdapter<Item> itemArrayAdapter;
+public class OrderItemListActivity extends AppCompatActivity implements View.OnClickListener, ChildEventListener,
+        AdapterView.OnItemClickListener,AdapterView.OnItemSelectedListener{
+    ImageButton imageButtonAdd,imageButtonSearch;
+    ListView lvOrders;
+    Button btnReturn;
+    ArrayList<Order> listOfOrders, listOfSearchOrder;
+    ArrayAdapter<Order> orderArrayAdapter;
     DatabaseReference firebaseDatabase;
     Spinner spinnerListSearch;
     EditText edSearch;
@@ -61,45 +52,63 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff_itemlist);
+        setContentView(R.layout.activity_order_item_list);
         initialize();
-        checkThresholdsAndShowWarnings( FirebaseDatabase.getInstance().getReference("Item"), FirebaseDatabase.getInstance().getReference("Threshold"), FirebaseDatabase.getInstance().getReference("Order"),this);
-
+        Log.d("OrderItemListActivity", "onCreate: Here");
     }
-
     private void initialize() {
 
+        imageButtonAdd = findViewById(R.id.imageButtonAdd);
         imageButtonSearch = findViewById(R.id.imageButtonSearch);
-        btnLogOut = findViewById(R.id.btnLogOut);
+        btnReturn = findViewById(R.id.btnReturn);
+
         spinnerListSearch = findViewById(R.id.spinnerListSearch);
         rgPositionSearch = findViewById(R.id.rgPositionSearch);
         rbIDSearch = findViewById(R.id.rbIDSearch);
         rbNameSearch = findViewById(R.id.rbNameSearch);
         edSearch = findViewById(R.id.edSearch);
 
-        btnLogOut.setOnClickListener(this);
+        imageButtonAdd.setOnClickListener(this);
+        btnReturn.setOnClickListener(this);
+
         imageButtonSearch.setOnClickListener(this);
 
-        listOfItems = new ArrayList<>();
-        listOfSearchItems = new ArrayList<>();
-        firebaseDatabase = FirebaseDatabase.getInstance().getReference("Item");
+        listOfOrders = new ArrayList<>();
+        listOfSearchOrder = new ArrayList<>();
+
+        firebaseDatabase = FirebaseDatabase.getInstance().getReference("Order");
         firebaseDatabase.addChildEventListener(this);
-        lvItems = findViewById(R.id.lvItems);
-        lvItems.setOnItemClickListener(this);
+        lvOrders = findViewById(R.id.lvOrders);
+        lvOrders.setOnItemClickListener(this);
 
-        itemArrayAdapter = new ItemArrayAdapter(this, R.layout.single_item_layout, listOfSearchItems);
-        lvItems.setAdapter(itemArrayAdapter);
+        orderArrayAdapter = new OrderArrayAdapter(this, R.layout.single_order_layout, listOfSearchOrder);
+        lvOrders.setAdapter(orderArrayAdapter);
 
-        String[] searchOptions = {"Item ID", "Item Name","All"};
-        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, searchOptions);
+
+        String[] searchOptions = {"Date","Item Name","All"};
+        ArrayAdapter<String> adapterSpinner = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item , searchOptions);
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerListSearch.setAdapter(adapterSpinner);
+
+
         spinnerListSearch.setOnItemSelectedListener(this);
-        spinnerListSearch.setSelection(1);
+
+
+
+
         rgPositionSearch.setVisibility(View.INVISIBLE);
+
+
         edSearch.setVisibility(View.INVISIBLE);
+
+
         imageButtonSearch.setVisibility(View.INVISIBLE);
+
+
+
         registerActResL();
+        Log.d("OrderItemListActivity", "init");
+
     }
 
     private void registerActResL() {
@@ -109,78 +118,86 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
                     @Override
                     public void onActivityResult(ActivityResult o) {
                         if (o.getResultCode() == RESULT_OK) {
-                            Item receivedItem = (Item) o.getData().getSerializableExtra("new_item");
-                            for (int i = 0; i < listOfItems.size(); i++) {
-                                Item currentItem = listOfItems.get(i);
-                                if (currentItem.getItemId() == receivedItem.getItemId()) {
-                                    listOfItems.set(i, receivedItem);
+                            Log.println(Log.ERROR,"debug","here3");
+                            Order receivedOrder = (Order) o.getData().getSerializableExtra("new_order");
+                            Log.println(Log.ERROR,"debug","here4");
+                            for (int i = 0; i < listOfOrders.size(); i++) {
+                                Order currentItem = listOfOrders.get(i);
+                                if (currentItem.getOrderId() == receivedOrder.getOrderId()) {
+                                    listOfOrders.set(i, receivedOrder);
                                     break;
                                 }
                             }
-                            for (int i = 0; i < listOfSearchItems.size(); i++) {
-                                Item currentItem = listOfSearchItems.get(i);
-                                if (currentItem.getItemId() == receivedItem.getItemId()) {
-                                    listOfSearchItems.set(i, receivedItem);
+                            for (int i = 0; i < listOfSearchOrder.size(); i++) {
+                                Order currentOrder = listOfSearchOrder.get(i);
+                                if (currentOrder.getOrderId() == receivedOrder.getOrderId()) {
+                                    listOfSearchOrder.set(i, receivedOrder);
                                     break;
                                 }
                             }
-                            itemArrayAdapter.notifyDataSetChanged();
+                            orderArrayAdapter.notifyDataSetChanged();
                         }
+
+
                     }
                 }
         );
+        Log.d("OrderItemListActivity", "register");
+
+
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnLogOut) {
+        if (v.getId() == R.id.btnReturn) {
             finish();
         } else if (v.getId() == R.id.imageButtonSearch) {
+            Log.d("TAG", "onClick:button ");
             searchItem(String.valueOf(spinnerListSearch.getSelectedItem()));
         }
+        else if (v.getId() == R.id.imageButtonAdd) {
+            Intent intent = new Intent(this, OrderActivity.class);
+            //intent.putExtra("listOfItems", listOfOrders);
+            actResL.launch(intent);
+        }
+
     }
 
 
     private void searchItem(String searchOption) {
-        listOfSearchItems.clear();
+        listOfSearchOrder.clear();
         switch (searchOption) {
-            case "Item ID":
-                String searchItemIdStr = edSearch.getText().toString().trim();
-                if (!searchItemIdStr.isEmpty()) {
-                    try {
-                        int searchItemId = Integer.parseInt(searchItemIdStr);
-                        for (Item currentItem : listOfItems) {
-                            if (currentItem.getItemId() == searchItemId) {
-                                listOfSearchItems.add(currentItem);
-                            }
-                        }
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
+            case "Date":
+                String searchItemDate = edSearch.getText().toString().trim();
+                Log.d("Date", "searchItem: Date");
+                for (Order currentItem : listOfOrders) {
+                    if (currentItem.getDate().contains(searchItemDate)) {
+                        listOfSearchOrder.add(currentItem);
                     }
                 }
                 break;
             case "Item Name":
                 String searchItemName = edSearch.getText().toString().trim();
-                for (Item currentItem : listOfItems) {
-                    if (currentItem.getName().equalsIgnoreCase(searchItemName)) {
-                        listOfSearchItems.add(currentItem);
+                for (Order currentItem : listOfOrders) {
+                    if (currentItem.getItemName().toLowerCase().contains(searchItemName.toLowerCase())) {
+                        listOfSearchOrder.add(currentItem);
                     }
                 }
                 break;
 
         }
-        itemArrayAdapter.notifyDataSetChanged();
+        orderArrayAdapter.notifyDataSetChanged();
     }
 
 
     @Override
     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-        Item item = snapshot.getValue(Item.class);
+        Order item = snapshot.getValue(Order.class);
         if (item != null) {
-            listOfItems.add(item);
-            listOfSearchItems.add(item);
+            listOfOrders.add(item);
+            listOfSearchOrder.add(item);
             Log.d("Firebase", "Item added: " + item.toString());
-            itemArrayAdapter.notifyDataSetChanged();
+            orderArrayAdapter.notifyDataSetChanged();
         } else {
             Log.e("Firebase", "Received null item from database");
         }
@@ -208,11 +225,11 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, StaffActivity.class);
-        Item item = listOfSearchItems.get(position);
-        intent.putExtra("receivedItem", item);
-        intent.putExtra("listOfItems", listOfItems);
-        actResL.launch(intent);
+        //Intent intent = new Intent(this, ManagerActivity.class);
+        //Order item = listOfSearchOrder.get(position);
+        //intent.putExtra("receivedItem", item);
+        //intent.putExtra("listOfItems", listOfOrders);
+        //actResL.launch(intent);
     }
 
 
@@ -221,8 +238,8 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
         edSearch.setText(null);
         rgPositionSearch.clearCheck();
         switch (String.valueOf(parent.getItemAtPosition(position))) {
-            case "Item ID":
-                edSearch.setHint("Enter Item ID");
+            case "Date":
+                edSearch.setHint("Enter Date");
                 rgPositionSearch.setVisibility(View.INVISIBLE);
                 edSearch.setVisibility(View.VISIBLE);
                 imageButtonSearch.setVisibility(View.VISIBLE);
@@ -234,30 +251,18 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
                 imageButtonSearch.setVisibility(View.VISIBLE);
                 break;
             case "All":
-                listOfSearchItems.clear();
+                listOfSearchOrder.clear();
                 rgPositionSearch.setVisibility(View.INVISIBLE);
                 edSearch.setVisibility(View.INVISIBLE);
-                listOfSearchItems.addAll(listOfItems);
+                listOfSearchOrder.addAll(listOfOrders);
                 imageButtonSearch.setVisibility(View.INVISIBLE);
-                itemArrayAdapter.notifyDataSetChanged();
+                orderArrayAdapter.notifyDataSetChanged();
                 break;
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @Override
-    public void onOrderAdded() {
-        Toast.makeText(this, "Order added successfully", Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public void onQuantityBelowThreshold(Item item) {
-        Toast.makeText(this, "Item "+item.getItemId()+" "+item.getName()+" quantity is below the threshold minimum quantity(current "+item.getQuantity()+")", Toast.LENGTH_LONG).show();
 
     }
 }
