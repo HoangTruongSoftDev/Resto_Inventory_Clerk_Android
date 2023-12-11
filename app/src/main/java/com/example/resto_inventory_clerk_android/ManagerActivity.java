@@ -63,7 +63,7 @@ public class ManagerActivity extends AppCompatActivity implements View.OnClickLi
         btnSave.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
-
+        edTotalPrice.setEnabled(false);
         listOfItems = new ArrayList<>();
 
         itemDatabase = FirebaseDatabase.getInstance().getReference("Item");
@@ -126,6 +126,7 @@ public class ManagerActivity extends AppCompatActivity implements View.OnClickLi
             intent.putExtra("delete_item", deleteItem);
             setResult(RESULT_FIRST_USER, intent);
             Snackbar.make(v, "The Item with id: " + id + message, Snackbar.LENGTH_LONG).show();
+            Service.clearAllWidgets((ViewGroup)findViewById(R.id.constraintLayoutManager));
         } catch (Exception e) {
             Snackbar.make(v, e.getMessage(), Snackbar.LENGTH_LONG).show();
         }

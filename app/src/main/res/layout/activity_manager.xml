@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ManagerActivity">
+    tools:context=".ManagerActivity"
+    android:id="@+id/constraintLayoutManager"
+    >
 
     <Button
         android:id="@+id/btnConsume2"
@@ -150,6 +152,7 @@
         android:inputType="text"
         app:layout_constraintBaseline_toBaselineOf="@id/tvTotalPrice"
         app:layout_constraintStart_toStartOf="@id/edUnitOfMeasure"
+
         />
 
     <TextView

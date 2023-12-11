@@ -162,7 +162,7 @@ public class StaffItemListActivity extends AppCompatActivity implements View.OnC
             case "Item Name":
                 String searchItemName = edSearch.getText().toString().trim();
                 for (Item currentItem : listOfItems) {
-                    if (currentItem.getName().equalsIgnoreCase(searchItemName)) {
+                    if (currentItem.getName().toLowerCase().contains(searchItemName.toLowerCase())) {
                         listOfSearchItems.add(currentItem);
                     }
                 }

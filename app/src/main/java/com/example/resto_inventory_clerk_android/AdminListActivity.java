@@ -277,7 +277,7 @@ public class AdminListActivity extends AppCompatActivity implements View.OnClick
                 break;
             case "First Name":
                 for (Employee currentEmployee : listOfEmployees) {
-                    if (currentEmployee.getFirstName().equals(edSearch.getText().toString())) {
+                    if (currentEmployee.getFirstName().toLowerCase().contains(edSearch.getText().toString().toLowerCase())) {
                         listOfSearchEmployees.add(currentEmployee);
                         listOfSearchUsers.add((User)listOfUsers.stream().filter(u -> u.getUserId() == currentEmployee.getEmployeeId()).findFirst().orElse(null));
                     }
@@ -285,7 +285,7 @@ public class AdminListActivity extends AppCompatActivity implements View.OnClick
                 break;
             case "Last Name":
                 for (Employee currentEmployee : listOfEmployees) {
-                    if (currentEmployee.getLastName().equals(edSearch.getText().toString())) {
+                    if (currentEmployee.getLastName().toLowerCase().contains((edSearch.getText().toString().toLowerCase()))) {
                         listOfSearchEmployees.add(currentEmployee);
                         listOfSearchUsers.add((User)listOfUsers.stream().filter(u -> u.getUserId() == currentEmployee.getEmployeeId()).findFirst().orElse(null));
                     }
@@ -293,7 +293,7 @@ public class AdminListActivity extends AppCompatActivity implements View.OnClick
                 break;
             case "Email":
                 for (Employee currentEmployee : listOfEmployees) {
-                    if (currentEmployee.getEmail().equals(edSearch.getText().toString())) {
+                    if (currentEmployee.getEmail().toLowerCase().contains(edSearch.getText().toString().toLowerCase())) {
                         listOfSearchEmployees.add(currentEmployee);
                         listOfSearchUsers.add((User)listOfUsers.stream().filter(u -> u.getUserId() == currentEmployee.getEmployeeId()).findFirst().orElse(null));
                     }
